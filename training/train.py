@@ -7,7 +7,7 @@ from transformers import PreTrainedModel
 
 device = torch.device("cpu:0" if torch.cuda.is_available() else "cpu")
 
-def set_model(model: PreTrainedModel, batch: DataLoader[tuple[torch.Tensor, torch.Tensor]]) -> PreTrainedModel: 
+def get_prediction(model: PreTrainedModel, batch: DataLoader[tuple[torch.Tensor, torch.Tensor]]) -> PreTrainedModel: 
 
   input_ids = batch['input_ids'].to(device)
   a_mask = batch['attention_mask'].to(device)
@@ -31,7 +31,7 @@ def train_epoch(model: PreTrainedModel, train_loader: DataLoader, optim: AdamW, 
 
         optim.zero_grad()
 
-        outputs = set_model(model, batch)
+        outputs = get_prediction(model, batch)
         loss = outputs[0]
 
         # backwards pass 
