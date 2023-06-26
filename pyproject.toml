@@ -15,6 +15,18 @@ transformers = "^4.30.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
+ruff = "^0.0.275"
+
+[tool.ruff]
+line-length = 100  # defaults to 88 like black
+target-version = "py311"  # the python version to target, useful when considering code upgrades, defaults to "py310"
+
+select = [
+  "E",   # pycodestyle
+  "F",   # pyflakes
+  "UP",  # pyupgrade,
+  "I",   # isort
+]
 
 [build-system]
 requires = ["poetry-core"]
