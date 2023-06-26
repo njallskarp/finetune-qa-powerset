@@ -16,6 +16,8 @@ transformers = "^4.30.2"
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
 ruff = "^0.0.275"
+mypy = "^1.4.1"
+pyright = "^1.1.316"
 
 [tool.ruff]
 line-length = 100  # defaults to 88 like black
