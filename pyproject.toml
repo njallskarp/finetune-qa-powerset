@@ -9,7 +9,12 @@ packages = [{include = "finetune_qa_powerset"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+torch = "^2.0.1"
+transformers = "^4.30.2"
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
 
 [build-system]
 requires = ["poetry-core"]
