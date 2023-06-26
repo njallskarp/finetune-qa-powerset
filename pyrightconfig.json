@@ -1,0 +1,9 @@
+{
+  "include": ["**/*.py"],
+  "exclude": ["**/tests/**/*.py", "**/__pycache__/**"],
+  "pythonVersion": "3.11",
+  "reportMissingTypeStubs": false,
+  "reportMissingImports": true,
+  "strict": true,
+  "venvPath": "venv"
+}
