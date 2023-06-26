@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "finetune-qa-powerset"
+version = "0.1.0"
+description = "Repo to finetune QA models using available QA resoures in Icelandic"
+authors = ["lsig <logis21@ru.is>, njallskarp <njallis@gmail.com>, eysta00 <eysi@live.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "finetune_qa_powerset"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
