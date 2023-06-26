@@ -7,7 +7,8 @@ from transformers import PreTrainedModel
 
 device = torch.device("cpu:0" if torch.cuda.is_available() else "cpu")
 
-def set_model(model: PreTrainedModel, batch:DataLoader[tuple[torch.Tensor, torch.Tensor]]) -> PreTrainedModel: 
+def set_model(model: PreTrainedModel, batch: DataLoader[tuple[torch.Tensor, torch.Tensor]]) -> PreTrainedModel: 
+
   input_ids = batch['input_ids'].to(device)
   a_mask = batch['attention_mask'].to(device)
   start_pos = batch['start_positions'].to(device)
