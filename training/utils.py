@@ -1,13 +1,13 @@
 import torch
 from torch import device
 from torch.utils.data import DataLoader
-from transformers import PreTrainedModel
+from transformers import BertForQuestionAnswering
 
 
 def get_rediction() -> device:
     return torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-def get_prediction(model: PreTrainedModel, batch: DataLoader[tuple[torch.Tensor, torch.Tensor]]) -> torch.FloatTensor: 
+def get_prediction(model: BertForQuestionAnswering, batch: DataLoader[tuple[torch.Tensor, torch.Tensor]]) -> tuple[torch.FloatTensor]: 
   """
   Get the answer prediction from the model
   """
