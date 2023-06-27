@@ -29,7 +29,7 @@ jobs:
 
       - name: Block pull request if linting fails
         if: ${{ failure() }}
-        uses: reviewdog/action-annotate@v1
+        uses: reviewdog/action-setup@v1
         with:
           annotation_level: failure
           tool_name: Ruff Linter
