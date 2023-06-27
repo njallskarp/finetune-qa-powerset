@@ -20,7 +20,7 @@ mypy = "^1.4.1"
 pyright = "^1.1.316"
 
 [tool.ruff]
-line-length = 100  # defaults to 88 like black
+line-length = 200  # defaults to 88 like black
 target-version = "py311"  # the python version to target, useful when considering code upgrades, defaults to "py310"
 include = ["**/*.py"]
 
