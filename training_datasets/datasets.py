@@ -3,18 +3,9 @@ from torch.utils.data import Dataset
 
 
 class SquadDataset(Dataset):
-    """
-    Code reused from open source colab notebook:
+    """ Code reused from open source colab notebook:
     https://github.com/alexaapo/BERT-based-pretrained-model-using-SQuAD-2.0-dataset/blob/main/Fine_Tuning_Bert.ipynb
     """
-    class SquadDataset(Dataset):
-        """
-        A PyTorch dataset.
-
-        Args:
-            encodings (any): The preprocessed input encodings.
-            is_train (bool, optional): Whether the dataset is for training or not. Defaults to True.
-        """
     def __init__(self, encodings: any, is_train: bool = True):
         self.encodings = encodings
         self.is_train = is_train
