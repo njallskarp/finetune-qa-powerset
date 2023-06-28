@@ -19,20 +19,20 @@ def train_epoch(model: PreTrainedModel, train_loader: DataLoader, optim: AdamW, 
     
     pbar = tqdm(train_loader)
 
-    for batch in pbar: 
+    for batch in pbar:
 
         optim.zero_grad()
 
         outputs = get_prediction(model, batch)
         loss = outputs[0]
 
-        # backwards pass 
+        # backwards pass
         loss.backward()
 
-        # update weights 
+        # update weights
         optim.step()
 
-        # update the learning rate 
+        # update the learning rate
         scheduler.step()
 
         total_loss += loss.item()

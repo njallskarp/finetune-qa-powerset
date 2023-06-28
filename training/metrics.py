@@ -1,14 +1,14 @@
 import collections
 import re
 import string
-from typing import TypedDict
-from ..types.declarations import Metrics
 
 import numpy as np
 from tokenizers import Tokenizer
 from transformers import RobertaForQuestionAnswering, pipeline
 
-"""
+from ..types.declarations import Metrics
+
+""" 
 The code in this cell is adapted from the official SQuAD validation script
 
 https://worksheets.codalab.org/rest/bundles/0x6b567e1cf2e041ec80d7098f031c5c9e/contents/blob/
@@ -63,7 +63,7 @@ def __normalize_answer(s: str) -> str:
           str: text with all letters in lower case
       """
       return text.lower()
-      
+
     # return normalized answer
     return white_space_fix(remove_articles(remove_punc(lower(s))))
 
@@ -77,7 +77,7 @@ def __get_tokens(s: str) -> list[str]:
     Returns:
         list[str]: list of tokens
   """
-    if not s: 
+    if not s:
         return []
     return __normalize_answer(s).split()
 
@@ -128,7 +128,7 @@ def __precision(num_same: int, pred_toks: list[str]) -> float:
     """
     if len(pred_toks) == 0:
       return 0
-    return 1.0 * num_same / len(pred_toks) 
+    return 1.0 * num_same / len(pred_toks)
 
 def __f1(num_same: int, pred_toks: list[str], gold_toks: list[str]) -> float:
     """Calculates f1-score based on token info
@@ -191,54 +191,54 @@ def f1(a_gold: str, a_pred: str) -> float:
     return __f1(*vars)
   
 def evaluate_model(
-  model: RobertaForQuestionAnswering, 
-  tokenizer: Tokenizer, 
-  val_texts: list[str], 
-  val_queries: list[str], 
+  model: RobertaForQuestionAnswering,
+  tokenizer: Tokenizer,
+  val_texts: list[str],
+  val_queries: list[str],
   val_answers: list[dict]
 ) -> Metrics:
-  """Function that evaluates a model
-  on a validation dataset
+    """Function that evaluates a model
+    on a validation dataset
 
-  Args:
-      model (RobertaForQuestionAnswering): The model to evaluate
-      tokenizer (Tokenizer): tokenizer for model
-      val_texts (list[str]): list of paragraphs for context
-      val_queries (list[str]): list of questions
-      val_answers (list[dict]): list of answer dictionaries
+    Args:
+        model (RobertaForQuestionAnswering): The model to evaluate
+        tokenizer (Tokenizer): tokenizer for model
+        val_texts (list[str]): list of paragraphs for context
+        val_queries (list[str]): list of questions
+        val_answers (list[dict]): list of answer dictionaries
 
-  Returns:
-      MetricsDict: F1, recall, and precision in dictionary
-  """
+    Returns:
+        MetricsDict: F1, recall, and precision in dictionary
+    """
 
-  # initialize pipeline
-  nlp = pipeline('question-answering', model=model, tokenizer=tokenizer, device = 0)
+    # initialize pipeline
+    nlp = pipeline('question-answering', model=model, tokenizer=tokenizer, device = 0)
 
-  # list of dictionaries with scores
-  results: list[Metrics] = []
+    # list of dictionaries with scores
+    results: list[Metrics] = []
+
+    # iterate through records
+    for context, question, answer in zip(val_texts, val_queries, val_answers):
+        
+        # get predicted text
+        answer_pred = nlp({
+        'question': question,
+        'context': context
+        })['answer']
+        
+        # calculate meta info for metric calulations
+        num_same, pred_toks, gold_toks = __span_comparison_helper(answer['text'], answer_pred)
+        
+        # clatulate scores
+        p  = __precision(num_same, pred_toks)
+        r  = __recall(num_same, gold_toks)
+        f1 = __f1(num_same, pred_toks, gold_toks)
+        
+        # append metrics
+        results.append({'precision': p, 'recall': r, 'f1': f1})
   
-  # iterate through records
-  for context, question, answer in zip(val_texts, val_queries, val_answers):
-    
-    # get predicted text
-    answer_pred = nlp({
-      'question': question,
-      'context': context
-    })['answer']
-    
-    # calculate meta info for metric calulations
-    num_same, pred_toks, gold_toks = __span_comparison_helper(answer['text'], answer_pred)
-    
-    # clatulate scores
-    p  = __precision(num_same, pred_toks)
-    r  = __recall(num_same, gold_toks)
-    f1 = __f1(num_same, pred_toks, gold_toks)
-    
-    # append metrics
-    results.append({'precision': p, 'recall': r, 'f1': f1})
+    avg_p = np.mean([_['precision'] for _ in results])
+    avg_r = np.mean([_['recall'] for _ in results])
+    avg_f = 2 * avg_p * avg_r / (avg_p + avg_r)
   
-  avg_p = np.mean([_['precision'] for _ in results])
-  avg_r = np.mean([_['recall'] for _ in results])
-  avg_f = 2 * avg_p * avg_r / (avg_p + avg_r)
-  
-  return {'precision': avg_p, 'recall': avg_r, 'f1': avg_f}
+    return {'precision': avg_p, 'recall': avg_r, 'f1': avg_f}

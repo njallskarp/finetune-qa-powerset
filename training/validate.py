@@ -8,12 +8,19 @@ from .metrics import evaluate_model
 from .utils import get_prediction
 
 
-def validate(model: PreTrainedModel, tokenizer: BertTokenizer, val_loader: DataLoader, val_texts: list[str], val_questions: list[str], val_answers: Answers) -> tuple(torch.float64, dict[str, int]):
+def validate(
+        model: PreTrainedModel,
+        tokenizer: BertTokenizer,
+        val_loader: DataLoader,
+        val_texts: list[str],
+        val_questions: list[str],
+        val_answers: Answers
+        ) -> tuple(torch.float64, dict[str, int]):
     """
     Validate our training data findings
     """
 
-    # evaluate model 
+    # evaluate model
     model.eval()
 
     pbar = tqdm(total = len(val_loader))
@@ -21,7 +28,7 @@ def validate(model: PreTrainedModel, tokenizer: BertTokenizer, val_loader: DataL
     total_loss: torch.float64 = 0
 
     for batch_idx, batch in enumerate(val_loader):
-        with torch.no_grad(): 
+        with torch.no_grad():
             outputs = get_prediction(model, batch)
             loss = outputs[0]
             # find the total loss

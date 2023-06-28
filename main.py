@@ -7,7 +7,7 @@ def parse_args() -> argparse.Namespace:
     
         returns argparse.Namespace
     """
-    
+
     parser = argparse.ArgumentParser("Finetune QA on Domain Powerset")
     
     parser.add_argument("--lr", type=float, default=2e-5, help="learning rate")
@@ -29,6 +29,7 @@ def main(args: argparse.Namespace) -> None:
     # TODO: set up training and call training pipeline
 
 if __name__ == "__main__":
+    
     
     args = parse_args()
     
