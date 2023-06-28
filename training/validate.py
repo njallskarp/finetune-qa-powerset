@@ -4,6 +4,7 @@ from tqdm import tqdm
 from transformers import BertTokenizer, PreTrainedModel
 
 from ..types.declarations import Answers
+from .metrics import evaluate_model
 from .utils import get_prediction
 
 
@@ -30,7 +31,6 @@ def validate(model: PreTrainedModel, tokenizer: BertTokenizer, val_loader: DataL
 
     total_loss /= len(val_loader)
 
-    #TODO: need to make evaluate_model function
     metrics_dict = evaluate_model(model, tokenizer, val_texts, val_questions, val_answers)
 
     model.train()
