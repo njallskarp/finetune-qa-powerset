@@ -1,7 +1,7 @@
 from typing import TypedDict
 
 
-class Answers(TypedDict): 
+class Answers(TypedDict):
     """
     Type for answers dictionary
     """
