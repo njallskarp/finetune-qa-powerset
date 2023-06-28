@@ -2,6 +2,7 @@ import collections
 import re
 import string
 from typing import TypedDict
+from ..types.declarations import Metrics
 
 import numpy as np
 from tokenizers import Tokenizer
@@ -189,21 +190,13 @@ def f1(a_gold: str, a_pred: str) -> float:
     vars = __span_comparison_helper(a_gold, a_pred)
     return __f1(*vars)
   
-class MetricsDict(TypedDict):
-    """the scores reported for each record
-    and the dataset as a whole
-    """
-    f1: float
-    recall: float
-    precision: float
-
 def evaluate_model(
   model: RobertaForQuestionAnswering, 
   tokenizer: Tokenizer, 
   val_texts: list[str], 
   val_queries: list[str], 
   val_answers: list[dict]
-) -> MetricsDict:
+) -> Metrics:
   """Function that evaluates a model
   on a validation dataset
 
@@ -222,7 +215,7 @@ def evaluate_model(
   nlp = pipeline('question-answering', model=model, tokenizer=tokenizer, device = 0)
 
   # list of dictionaries with scores
-  results: list[MetricsDict] = []
+  results: list[Metrics] = []
   
   # iterate through records
   for context, question, answer in zip(val_texts, val_queries, val_answers):
