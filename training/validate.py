@@ -9,11 +9,11 @@ from .utils import get_prediction
 
 
 def validate(
-        model: PreTrainedModel, 
-        tokenizer: BertTokenizer, 
-        val_loader: DataLoader, 
-        val_texts: list[str], 
-        val_questions: list[str], 
+        model: PreTrainedModel,
+        tokenizer: BertTokenizer,
+        val_loader: DataLoader,
+        val_texts: list[str],
+        val_questions: list[str],
         val_answers: Answers
         ) -> tuple(torch.float64, dict[str, int]):
     """
