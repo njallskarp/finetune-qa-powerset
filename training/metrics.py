@@ -1,14 +1,14 @@
 import collections
 import re
 import string
-from typing import TypedDict
-from ..types.declarations import Metrics
 
 import numpy as np
 from tokenizers import Tokenizer
 from transformers import RobertaForQuestionAnswering, pipeline
 
-"""
+from ..types.declarations import Metrics
+
+""" 
 The code in this cell is adapted from the official SQuAD validation script
 
 https://worksheets.codalab.org/rest/bundles/0x6b567e1cf2e041ec80d7098f031c5c9e/contents/blob/
