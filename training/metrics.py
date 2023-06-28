@@ -99,7 +99,7 @@ def __span_comparison_helper(a_gold: str, a_pred: str) -> tuple[int, list[str], 
     pred_toks = __get_tokens(a_pred)
     common = collections.Counter(gold_toks) & collections.Counter(pred_toks)
     num_same = sum(common.values())
-    
+
     return num_same, pred_toks, gold_toks
 
 def __recall(num_same: int, gold_toks: list[str]) -> float:
@@ -187,8 +187,8 @@ def f1(a_gold: str, a_pred: str) -> float:
     Returns:
         float: f1 score
     """
-    vars = __span_comparison_helper(a_gold, a_pred)
-    return __f1(*vars)
+    args = __span_comparison_helper(a_gold, a_pred)
+    return __f1(*args)
   
 def evaluate_model(
   model: RobertaForQuestionAnswering,

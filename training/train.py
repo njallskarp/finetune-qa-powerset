@@ -16,7 +16,7 @@ def train_epoch(model: PreTrainedModel, train_loader: DataLoader, optim: AdamW, 
     model.train()
 
     total_loss: torch.float64 = 0
-    
+
     pbar = tqdm(train_loader)
 
     for batch in pbar:
