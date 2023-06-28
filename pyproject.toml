@@ -11,6 +11,7 @@ packages = [{include = "finetune_qa_powerset"}]
 python = "^3.11"
 torch = "^2.0.1"
 transformers = "^4.30.2"
+tokenizers = "^0.13.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -18,10 +19,12 @@ pytest = "^7.4.0"
 ruff = "^0.0.275"
 mypy = "^1.4.1"
 pyright = "^1.1.316"
+black = "^23.3.0"
 
 [tool.ruff]
-line-length = 100  # defaults to 88 like black
+line-length = 88 # defaults to 88 like black
 target-version = "py311"  # the python version to target, useful when considering code upgrades, defaults to "py310"
+include = ["**/*.py"]
 
 select = [
   "E",   # pycodestyle
@@ -29,6 +32,19 @@ select = [
   "UP",  # pyupgrade,
   "I",   # isort
 ]
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # The following are specific to Black, you probably don't want those.
+  | blib2to3
+  | tests/data
+  | profiling
+)/
+'''
 
 [build-system]
 requires = ["poetry-core"]
