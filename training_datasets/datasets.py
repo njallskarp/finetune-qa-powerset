@@ -12,7 +12,7 @@ class SquadDataset(Dataset):
         self.encodings = encodings
         self.is_train = is_train
 
-    def __getitem__(self, idx: int) -> dict:
+    def __getitem__(self, idx: int) -> Encoding:
         item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
         return item
 
