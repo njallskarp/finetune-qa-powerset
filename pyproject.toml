@@ -22,7 +22,7 @@ pyright = "^1.1.316"
 black = "^23.3.0"
 
 [tool.ruff]
-line-length = 200  # defaults to 88 like black
+line-length = 88 # defaults to 88 like black
 target-version = "py311"  # the python version to target, useful when considering code upgrades, defaults to "py310"
 include = ["**/*.py"]
 
@@ -34,7 +34,7 @@ select = [
 ]
 
 [tool.black]
-line-length = 200
+line-length = 88
 target-version = ['py311']
 include = '\.pyi?$'
 extend-exclude = '''
