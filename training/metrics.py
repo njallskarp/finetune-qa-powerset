@@ -198,8 +198,9 @@ def f1(a_gold: str, a_pred: str) -> float:
     Returns:
         float: f1 score
     """
-    vars = __span_comparison_helper(a_gold, a_pred)
-    return __f1(*vars)
+
+    args = __span_comparison_helper(a_gold, a_pred)
+    return __f1(*args)
 
 
 def evaluate_model(

@@ -9,7 +9,6 @@ def parse_args() -> argparse.Namespace:
     """
 
     parser = argparse.ArgumentParser("Finetune QA on Domain Powerset")
-
     parser.add_argument("--lr", type=float, default=2e-5, help="learning rate")
     parser.add_argument("--batch_size", type=int, default=16, help="batch size")
     parser.add_argument("--epochs", type=int, default=3, help="number of epochs")
