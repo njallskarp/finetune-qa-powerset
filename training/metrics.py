@@ -1,11 +1,11 @@
-import string
-import re
 import collections
-from transformers import pipeline, RobertaForQuestionAnswering
-from tokenizers import Tokenizer
-import numpy as np
+import re
+import string
 from typing import TypedDict
 
+import numpy as np
+from tokenizers import Tokenizer
+from transformers import RobertaForQuestionAnswering, pipeline
 
 """
 The code in this cell is adapted from the official SQuAD validation script
@@ -76,7 +76,8 @@ def __get_tokens(s: str) -> list[str]:
     Returns:
         list[str]: list of tokens
   """
-    if not s: return []
+    if not s: 
+        return []
     return __normalize_answer(s).split()
 
 def __span_comparison_helper(a_gold: str, a_pred: str) -> tuple[int, list[str], list[str]]:
@@ -100,7 +101,7 @@ def __span_comparison_helper(a_gold: str, a_pred: str) -> tuple[int, list[str], 
     
     return num_same, pred_toks, gold_toks
 
-def __recall(num_same: int, gold_toks: list[str] -> float):
+def __recall(num_same: int, gold_toks: list[str]) -> float:
     """Calculates recall based on token info
 
     Args:
