@@ -8,9 +8,11 @@ from transformers import PreTrainedModel
 from .utils import get_prediction
 
 
-def train_epoch(model: PreTrainedModel, train_loader: DataLoader, optim: AdamW, scheduler: LambdaLR) -> torch.float64:
+def train_epoch(
+    model: PreTrainedModel, train_loader: DataLoader, optim: AdamW, scheduler: LambdaLR
+) -> torch.float64:
     """
-    Train model epochs 
+    Train model epochs
     """
     # Set model to train mode
     model.train()
@@ -20,7 +22,6 @@ def train_epoch(model: PreTrainedModel, train_loader: DataLoader, optim: AdamW, 
     pbar = tqdm(train_loader)
 
     for batch in pbar:
-
         optim.zero_grad()
 
         outputs = get_prediction(model, batch)
