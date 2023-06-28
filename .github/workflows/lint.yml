@@ -39,6 +39,9 @@ jobs:
 
       - run: poetry install --no-interaction --no-root
         if: steps.cache-deps.outputs.cache-hit != 'true'
+        
+      - name: Format code
+        run: poetry run black .
 
       - name: Check for linting errors
         run: poetry run ruff check . --fix
