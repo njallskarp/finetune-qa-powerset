@@ -46,12 +46,14 @@ jobs:
           git add .
 
       - name: Check for linting errors
-        run: poetry run ruff check . --fix
+        run: |
+          poetry run ruff check . --fix
+          git add .
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "chore(build): auto-commit format"
+          commit_message: "chore(build): auto-commit format and lint"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
           commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
