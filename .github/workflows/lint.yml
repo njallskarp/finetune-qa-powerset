@@ -55,9 +55,9 @@ jobs:
         if: ${{ failure() }}
         uses: reviewdog/action-setup@v1
         with:
-        annotation_level: failure
-        tool_name: Ruff Linter
-        fail_on_error: true
+          annotation_level: failure
+          tool_name: Ruff Linter
+          fail_on_error: true
   save:
     name: save
     if: github.ref != 'refs/heads/dev' || github.ref != 'refs/heads/main'
