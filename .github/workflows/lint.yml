@@ -58,13 +58,14 @@ jobs:
           annotation_level: failure
           tool_name: Ruff Linter
           fail_on_error: true
-  save:
-    name: save
-    if: github.ref != 'refs/heads/dev' || github.ref != 'refs/heads/main'
-    needs: lint
-    runs-on: ubuntu-latest
-    steps:
+      # save:
+      #   name: save
+      #   if: github.ref != 'refs/heads/dev' || github.ref != 'refs/heads/main'
+      #   needs: lint
+      #   runs-on: ubuntu-latest
+      # steps:
       - name: Commit changes
+        if: github.ref != 'refs/heads/dev' || github.ref != 'refs/heads/main'
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "chore(build): auto-commit format and lint"
@@ -72,8 +73,9 @@ jobs:
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
           commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
 
-      - uses: actions/checkout@v3
       - name: Push changes
+        if: github.ref != 'refs/heads/dev' || github.ref != 'refs/heads/main'
+        uses: actions/checkout@v3
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
