@@ -43,34 +43,39 @@ jobs:
       - name: Format code
         run: |
           poetry run black .
-          git add .
+          # git add .
 
       - name: Check for linting errors
         run: |
           poetry run ruff check . --fix
-          git add .
-
-      # - name: Commit changes
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: "chore(build): auto-commit format and lint"
-      #     commit_user_name: "github-actions[bot]"
-      #     commit_user_email: "github-actions[bot]@users.noreply.github.com"
-      #     commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          # git add .
 
       - name: Block pull request if linting fails
         if: ${{ failure() }}
         uses: reviewdog/action-setup@v1
         with:
-          annotation_level: failure
-          tool_name: Ruff Linter
-          fail_on_error: true
-
+        annotation_level: failure
+        tool_name: Ruff Linter
+        fail_on_error: true
+  save:
+    name: save
+    if: github.ref != 'refs/heads/dev' || github.ref != 'refs/heads/main'
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
       - name: Commit changes
-        if: github.ref != 'refs/heads/dev' || github.ref != 'refs/heads/main'
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore(build): auto-commit format and lint"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+
+      - name: Push changes
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git remote add gh-token "https://${{ secrets.GITHUB_TOKEN }}@github.com/google-github-actions/release-please-action.git"
           git add .
           git commit -m "chore(build): auto-commit format and lint"
           git push origin HEAD:${{ github.ref }}
