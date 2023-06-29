@@ -9,13 +9,19 @@ from transformers import (
 from training.utils import get_device
 
 MODELS = {
-    "icebert":  { "name": "Mideind/icebert", "bert_type": RobertaForQuestionAnswering},
-    "convbert": { "name": "jonfd/convbert-base-igc-is", "bert_type": ConvBertForQuestionAnswering}
+    "icebert": {"name": "Mideind/icebert", "bert_type": RobertaForQuestionAnswering},
+    "convbert": {
+        "name": "jonfd/convbert-base-igc-is",
+        "bert_type": ConvBertForQuestionAnswering,
+    },
 }
 
+
 def load(model_name: str) -> tuple[BertModel, Encoding]:
-    if model_name not in MODELS: 
-        raise ValueError(f"Invalid model name: {model_name}. Supported models: {list(MODELS.keys())}")
+    if model_name not in MODELS:
+        raise ValueError(
+            f"Invalid model name: {model_name}. Supported models: {list(MODELS.keys())}"
+        )
 
     bert_model = MODELS[model_name]
     bert_type = bert_model["bert_type"]
