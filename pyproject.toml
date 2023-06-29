@@ -20,6 +20,7 @@ ruff = "^0.0.275"
 mypy = "^1.4.1"
 pyright = "^1.1.316"
 black = "^23.3.0"
+pytest-cov = "^4.1.0"
 
 [tool.ruff]
 line-length = 88 # defaults to 88 like black
