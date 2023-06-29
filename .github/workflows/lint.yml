@@ -3,7 +3,7 @@ name: Lint
 on:
   pull_request:
     branches:
-      - '*'
+      - "*"
 
 jobs:
   lint:
@@ -39,11 +39,12 @@ jobs:
 
       - run: poetry install --no-interaction --no-root
         if: steps.cache-deps.outputs.cache-hit != 'true'
-        
+
       - name: Format code
         run: |
           poetry run black .
           git add .
+          git commit -m "Auto-format code"
 
       - name: Check for linting errors
         run: poetry run ruff check . --fix
