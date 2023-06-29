@@ -72,6 +72,7 @@ jobs:
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
           commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
 
+      - uses: actions/checkout@v3
       - name: Push changes
         run: |
           git config user.name "github-actions[bot]"
