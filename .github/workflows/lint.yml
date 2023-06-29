@@ -77,11 +77,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
+          token: ${{ secrets.ACTION_TOKEN}}
       - name: Push changes
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git remote add gh-token "https://${{ secrets.GITHUB_TOKEN }}@github.com/google-github-actions/release-please-action.git"
+          # git remote add gh-token "https://${{ secrets.ACTION_TOKEN }}@github.com/google-github-actions/release-please-action.git"
           # git add .
           # git commit -m "chore(build): auto-commit format and lint"
           git push origin HEAD:${{ github.ref }}
