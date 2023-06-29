@@ -50,13 +50,20 @@ jobs:
           poetry run ruff check . --fix
           git add .
 
+      # - name: Commit changes
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     commit_message: "chore(build): auto-commit format and lint"
+      #     commit_user_name: "github-actions[bot]"
+      #     commit_user_email: "github-actions[bot]@users.noreply.github.com"
+      #     commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
       - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "chore(build): auto-commit format and lint"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
-          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+        if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore(build): auto-commit format and lint"
 
       - name: Block pull request if linting fails
         if: ${{ failure() }}
