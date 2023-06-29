@@ -44,12 +44,12 @@ jobs:
       - name: Format code
         run: |
           poetry run black .
-          # git add .
+          git add .
 
       - name: Check for linting errors
         run: |
           poetry run ruff check . --fix
-          # git add .
+          git add .
 
       - name: Block pull request if linting fails
         if: ${{ failure() }}
