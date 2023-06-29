@@ -63,6 +63,8 @@ jobs:
     if: github.ref != 'refs/heads/dev' || github.ref != 'refs/heads/main'
     needs: lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
