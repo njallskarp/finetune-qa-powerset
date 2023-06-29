@@ -67,7 +67,7 @@ jobs:
           fail_on_error: true
 
       - name: Commit changes
-        if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'
+        if: github.ref != 'refs/heads/dev' || github.ref != 'refs/heads/main'
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
