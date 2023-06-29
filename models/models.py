@@ -9,22 +9,22 @@ from transformers import (
 from training.utils import get_device
 
 MODELS = {
-    "icebert":  { "name": "Mideind/icebert", "model_type": RobertaForQuestionAnswering},
-    "convbert": { "name": "jonfd/convbert-base-igc-is", "model_type": ConvBertForQuestionAnswering}
+    "icebert":  { "name": "Mideind/icebert", "bert_type": RobertaForQuestionAnswering},
+    "convbert": { "name": "jonfd/convbert-base-igc-is", "bert_type": ConvBertForQuestionAnswering}
 }
 
 def load(model_name: str) -> tuple[BertModel, Encoding]:
     if model_name not in MODELS: 
         raise ValueError(f"Invalid model name: {model_name}. Supported models: {list(MODELS.keys())}")
 
-    BERT_MODEL = MODELS[model_name]
-    BERT_TYPE = BERT_MODEL["model_type"]
-    BERT_URL = BERT_MODEL["name"]
+    bert_model = MODELS[model_name]
+    bert_type = bert_model["bert_type"]
+    bert_url = bert_model["name"]
 
     device = get_device()
-    model = BERT_TYPE.from_pretrained(BERT_URL).to(device)
+    model = bert_type.from_pretrained(bert_url).to(device)
 
-    tokenizer = AutoTokenizer.from_pretrained(BERT_URL)
+    tokenizer = AutoTokenizer.from_pretrained(bert_url)
 
     print(f"\n\t{model_name.capitalize()} is loaded on {device}")
 
