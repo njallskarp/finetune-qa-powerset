@@ -66,13 +66,13 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "chore(build): auto-commit format and lint"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
-          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+      # - name: Commit changes
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     commit_message: "chore(build): auto-commit format and lint"
+      #     commit_user_name: "github-actions[bot]"
+      #     commit_user_email: "github-actions[bot]@users.noreply.github.com"
+      #     commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
 
       - uses: actions/checkout@v3
         with:
@@ -82,4 +82,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -a -m "chore(build): auto-commit format and lint"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
