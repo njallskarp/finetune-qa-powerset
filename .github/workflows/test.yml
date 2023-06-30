@@ -1,4 +1,4 @@
-name: Run PyTest
+name: Runing tests
 
 on:
   push:
@@ -54,6 +54,4 @@ jobs:
       #              run test suite
       #----------------------------------------------
       - name: Run tests
-        run: |
-          poetry shell
-          poetry run pytest --rootdir .
+        run: poetry run pytest --rootdir=tests
