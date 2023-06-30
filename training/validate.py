@@ -3,7 +3,8 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import BertTokenizer, PreTrainedModel
 
-from ..types.declarations import Answers
+from typings.declarations import Answers
+
 from .metrics import evaluate_model
 from .utils import get_prediction
 

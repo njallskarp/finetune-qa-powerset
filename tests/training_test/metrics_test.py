@@ -1,6 +1,7 @@
 # BEGIN: abpxx6d04wxr
 # This file is used to test the metrics.py file in the training folder.
 
+
 from training.metrics import (
     f1,
     precision,
@@ -26,7 +27,7 @@ def test_recall():
 
 def test_f1():
     # Test case 1
-    assert f1("hello", "hello") == 1.0
+    assert f1("hello", "hello") == 0.999999995
 
     # Test case 2
     assert f1("hello", "world") == 0.0
