@@ -7,7 +7,6 @@ on:
 
 jobs:
   lint:
-    name: lint
     runs-on: ubuntu-latest
 
     steps:
@@ -44,12 +43,17 @@ jobs:
       - name: Format code
         run: |
           poetry run black .
-          git add .
+
+      - name: Block PR if formatting is wrong
+        if: ${{ failure() }}
+        uses: reviewdog/action-setup@v1
+        with:
+          annotation_level: failure
+          tool_name: Ruff Linter
+          fail_on_error: true
 
       - name: Check for linting errors
-        run: |
-          poetry run ruff check . --fix
-          git add .
+        run: poetry run ruff check .
 
       - name: Block pull request if linting fails
         if: ${{ failure() }}
@@ -58,41 +62,3 @@ jobs:
           annotation_level: failure
           tool_name: Ruff Linter
           fail_on_error: true
-
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          token: ${{ secrets.ACTION_TOKEN || github.token }}
-      - name: Push changes
-        if: github.ref != 'refs/heads/dev' || github.ref != 'refs/heads/main'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore(build): auto-commit format and lint"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
-  # save:
-  #   name: save
-  #   if: github.ref != 'refs/heads/dev' || github.ref != 'refs/heads/main'
-  #   needs: lint
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: write
-  #   steps:
-  # - name: Commit changes
-  #   uses: stefanzweifel/git-auto-commit-action@v4
-  #   with:
-  #     commit_message: "chore(build): auto-commit format and lint"
-  #     commit_user_name: "github-actions[bot]"
-  #     commit_user_email: "github-actions[bot]@users.noreply.github.com"
-  #     commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
-
-  # - uses: actions/checkout@v3
-  #   with:
-  #     ref: ${{ github.event.pull_request.head.ref }}
-  #     token: ${{ secrets.ACTION_TOKEN || github.token }}
-  # - name: Push changes
-  #   run: |
-  #     git config user.name "github-actions[bot]"
-  #     git config user.email "github-actions[bot]@users.noreply.github.com"
-  #     git commit -a -m "chore(build): auto-commit format and lint"
-  #     git push origin HEAD:${{ github.event.pull_request.head.ref }}
