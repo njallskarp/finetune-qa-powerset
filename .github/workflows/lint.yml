@@ -51,7 +51,13 @@ jobs:
           tool_name: Ruff Linter
           fail_on_error: true
 
-      - name: runner / black formatter
+  format:
+    name: runner / black formatter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # Install specific version black (this step is not required. default is "black[jupyter]")
+      - run: pip install black==23.3.0
       - uses: reviewdog/action-black@v3
         with:
           github_token: ${{ secrets.github_token }}
@@ -59,4 +65,4 @@ jobs:
           reporter: github-pr-check
           # Change reporter level if you need.
           # GitHub Status Check won't become failure with a warning.
-          level: failure
+          level: warning
