@@ -54,10 +54,10 @@ jobs:
       - name: Check for formattin errors
         run: poetry run black . --check
 
-      # - name: Block PR if formatting is wrong
-      #   if: ${{ failure() }}
-      #   uses: reviewdog/action-setup@v1
-      #   with:
-      #     annotation_level: failure
-      #     tool_name: Ruff Linter
-      #     fail_on_error: true
+      - name: Block PR if formatting is wrong
+        if: ${{ failure() }}
+        uses: reviewdog/action-setup@v1
+        with:
+          annotation_level: failure
+          tool_name: Ruff Linter
+          fail_on_error: true

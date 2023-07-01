@@ -17,7 +17,7 @@ MODELS = {
 }
 
 
-def load(model_name: str) -> tuple[BertModel, Encoding]: 
+def load(model_name: str) -> tuple[BertModel, Encoding]:
     if model_name not in MODELS:
         raise ValueError(
             f"Invalid model name: {model_name}. Supported models: {list(MODELS.keys())}"
