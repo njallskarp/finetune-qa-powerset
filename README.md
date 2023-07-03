@@ -27,15 +27,15 @@ After installing dependencies, you can run the tests. Here's how:
 
 1. **Activate the Poetry environment**:
 
- ```bash
- poetry shell
- ```
+```bash
+poetry shell
+```
 
 2. **Run the tests** with PyTest:
 
- ```bash
- pytest
- ```
+```bash
+pytest
+```
 
  This will discover all the test files in the `tests` directory and run them.
 
