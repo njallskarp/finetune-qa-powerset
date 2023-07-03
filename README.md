@@ -52,6 +52,18 @@ When writing tests, here are some guidelines to follow:
 
 5.  **Consider normal cases, edge cases and error handling.** For example, test the system's behavior with normal sentences, empty strings, empty predictions, and so on. Ensure your code behaves as expected when given unusual or erroneous input.
 
+### When to Test Your Code
+
+Ideally, you should be testing your code at every step of the development process. Here are some specific times when you should run tests:
+
+*   **After writing a new function or method**: Write a test to confirm it behaves as expected.
+
+*   **After modifying existing code**: Run the relevant tests to ensure you haven't introduced any bugs.
+
+*   **Before pushing your changes**: Run the full test suite to catch any unforeseen issues.
+
+*   **Before opening a pull request**: Again, run the full test suite. Your PR will also be tested automatically via GitHub Actions.
+
 ### Continuous Integration
 
 We also use GitHub Actions for Continuous Integration (CI). Whenever you open a pull request, the test suite will automatically run on GitHub's servers. You'll be able to see whether your changes passed all tests before the changes are reviewed. Please make sure your tests pass in this environment as well as locally.
@@ -80,18 +92,6 @@ Our project mainly uses the following libraries:
 *   **Poetry**: We use Poetry for dependency management because it's simple yet powerful. It allows us to declare our project’s libraries dependency in a clear and structured way.
 
 These libraries are crucial to our project because they provide the tools we need to build, train, and test our models effectively and efficiently. They are all well-documented and widely used in the Python and Machine Learning communities, which means there's a wealth of knowledge and resources available for troubleshooting and learning.
-
-## When to Test Your Code
-
-Ideally, you should be testing your code at every step of the development process. Here are some specific times when you should run tests:
-
-*   **After writing a new function or method**: Write a test to confirm it behaves as expected.
-
-*   **After modifying existing code**: Run the relevant tests to ensure you haven't introduced any bugs.
-
-*   **Before pushing your changes**: Run the full test suite to catch any unforeseen issues.
-
-*   **Before opening a pull request**: Again, run the full test suite. Your PR will also be tested automatically via GitHub Actions.
 
 ## Testing Guidelines for Contributors
 
