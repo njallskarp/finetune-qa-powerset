@@ -25,13 +25,13 @@ poetry install
 
 After installing dependencies, you can run the tests. Here's how:
 
-1. **Activate the Poetry environment**:
+ 1.  **Activate the Poetry environment**:
 
 ```bash
 poetry shell
 ```
 
-2. **Run the tests** with PyTest:
+2.  **Run the tests** with PyTest:
 
 ```bash
 pytest
@@ -43,15 +43,15 @@ pytest
 
 When writing tests, here are some guidelines to follow:
 
-1. **Place your test files in the `tests` directory.** PyTest will automatically discover these tests.
+ 1. **Place your test files in the `tests` directory.** PyTest will automatically discover these tests.
 
-2. **Name your test file `test_*.py` or `*_test.py`.** This is the naming convention PyTest uses to discover test files.
+ 2. **Name your test file `test_*.py` or `*_test.py`.** This is the naming convention PyTest uses to discover test files.
 
-3. **Write tests as functions named `test_*()`.** Again, this is the naming convention PyTest uses to discover test cases.
+ 3. **Write tests as functions named `test_*()`.** Again, this is the naming convention PyTest uses to discover test cases.
 
-4. **Use assertions to verify outcomes.** For example, `assert func(10) == 42`.
+ 4. **Use assertions to verify outcomes.** For example, `assert func(10) == 42`.
 
-5. **Consider normal cases, edge cases and error handling.** For example, test the system's behavior with normal sentences, empty strings, empty predictions, and so on. Ensure your code behaves as expected when given unusual or erroneous input.
+ 5. **Consider normal cases, edge cases and error handling.** For example, test the system's behavior with normal sentences, empty strings, empty predictions, and so on. Ensure your code behaves as expected when given unusual or erroneous input.
 
 ### Continuous Integration
 
