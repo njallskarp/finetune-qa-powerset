@@ -5,7 +5,7 @@ import sys
 from unittest.mock import MagicMock
 
 import pytest
-import torch
+from torch import cuda
 
 
 class Mock(MagicMock):
@@ -19,5 +19,5 @@ if os.getenv("CI") == "true":
     sys.modules["torch"] = Mock()
 
 requires_cuda = pytest.mark.skipif(
-    not torch.cuda.is_available(), reason="Test skipped because it requires CUDA"
+    not cuda.is_available(), reason="Test skipped because it requires CUDA"
 )
