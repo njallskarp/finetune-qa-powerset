@@ -9,7 +9,6 @@ from training.metrics import (
 )
 
 
-@requires_cuda
 def test_precision():
     # Test case 1
     assert precision("hello", "hello") == 1.0
