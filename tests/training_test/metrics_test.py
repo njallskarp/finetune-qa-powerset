@@ -1,7 +1,7 @@
 # BEGIN: abpxx6d04wxr
 # This file is used to test the metrics.py file in the training folder.
 
-
+from tests.conftest import requires_cuda
 from training.metrics import (
     f1,
     precision,
@@ -9,6 +9,7 @@ from training.metrics import (
 )
 
 
+@requires_cuda
 def test_precision():
     # Test case 1
     assert precision("hello", "hello") == 1.0
@@ -17,6 +18,7 @@ def test_precision():
     assert precision("hello", "world") == 0.0
 
 
+@requires_cuda
 def test_recall():
     # Test case 1
     assert recall("hello", "hello") == 1.0
@@ -25,6 +27,7 @@ def test_recall():
     assert recall("hello", "world") == 0.0
 
 
+@requires_cuda
 def test_f1():
     # Test case 1
     assert f1("hello", "hello") == 0.999999995

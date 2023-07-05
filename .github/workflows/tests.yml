@@ -8,15 +8,15 @@ on:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
-
-    container:
-      image: pytorch/pytorch:latest
-      options: --ipc=host --gpus all
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
 
     - name: Install Poetry
       run: |
