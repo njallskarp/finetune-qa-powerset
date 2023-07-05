@@ -24,11 +24,11 @@ jobs:
 
     - name: Configure Poetry
       run: |
-        poetry config virtualenvs.create false
+        poetry config virtualenvs.create true
 
     - name: Install dependencies
       run: |
-        poetry install
+        poetry install --no-interaction --no-root
 
     - name: Run tests
       run: |
