@@ -3,7 +3,8 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import BertTokenizer, PreTrainedModel
 
-from ..types.declarations import Answers
+from definitions.declarations import Answers
+
 from .metrics import evaluate_model
 from .utils import get_prediction
 
@@ -15,7 +16,7 @@ def validate(
     val_texts: list[str],
     val_questions: list[str],
     val_answers: Answers,
-) -> tuple(torch.float64, dict[str, int]):
+) -> tuple[torch.float64, dict[str, int]]:
     """
     Validate our training data findings
     """
