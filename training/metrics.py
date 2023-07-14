@@ -6,7 +6,7 @@ import numpy as np
 from tokenizers import Tokenizer
 from transformers import RobertaForQuestionAnswering, pipeline
 
-from typings.declarations import Metrics
+from definitions.declarations import Metrics
 
 """ 
 The code in this cell is adapted from the official SQuAD validation script
