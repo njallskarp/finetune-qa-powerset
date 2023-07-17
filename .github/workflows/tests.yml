@@ -28,7 +28,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        poetry install --no-interaction --no-root
+        poetry install --without interaction,root
 
     - name: Install PyTorch
       run: |
