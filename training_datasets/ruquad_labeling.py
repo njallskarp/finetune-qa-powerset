@@ -122,6 +122,3 @@ def get_data() -> (
         (train_texts, train_questions, train_answers),
         (test_texts, test_questions, test_answers),
     )
-
-
-print(get_data())
