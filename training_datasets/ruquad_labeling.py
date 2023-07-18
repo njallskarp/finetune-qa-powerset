@@ -8,6 +8,7 @@ from definitions.declarations import AnswerKey, CleanRUResponse, RUResponse
 
 PROJECT_IDS = [1, 4, 5]
 
+
 def __api_key() -> str:
     env_vars = dotenv_values()
     api_key: str = env_vars.get("API_KEY", "")
