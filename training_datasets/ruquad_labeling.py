@@ -4,12 +4,9 @@ import os
 import requests
 from dotenv import dotenv_values
 
-# from definitions.declarations import AnswerKey
-# from ..definitions.declarations import AnswerKey, CleanRUResponse, RUResponse
 from definitions.declarations import AnswerKey, CleanRUResponse, RUResponse
 
 PROJECT_IDS = [1, 4, 5]
-
 
 def __api_key() -> str:
     env_vars = dotenv_values()
@@ -35,8 +32,8 @@ def __all_project_records() -> list[CleanRUResponse]:
     key = __api_key()
     all_project_records = []
 
-    for id in PROJECT_IDS:
-        p_records = __records(id, key)
+    for i in PROJECT_IDS:
+        p_records = __records(i, key)
         all_project_records.extend(p_records)
 
     return all_project_records
