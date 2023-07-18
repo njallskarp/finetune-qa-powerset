@@ -12,6 +12,7 @@ python = "^3.11"
 torch = "^2.0.1"
 transformers = "^4.30.2"
 tokenizers = "^0.13.3"
+python-dotenv = "^1.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
