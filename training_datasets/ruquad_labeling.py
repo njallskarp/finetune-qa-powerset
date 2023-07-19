@@ -59,20 +59,37 @@ def __invalid_record(record: CleanRUResponse) -> bool:
     return False
 
 
-def get_data() -> (
-    tuple[
-        tuple[list[str], list[str], list[AnswerKey]],
-        tuple[list[str], list[str], list[AnswerKey]],
-    ]
-):
-    test_texts, train_texts = [], []
-    test_questions, train_questions = [], []
-    test_answers, train_answers = [], []
+def __sources(records: list[CleanRUResponse]) -> set[str]:
+    sources = set()
 
+    for rec in records:
+        source = rec["meta"]["source"]
+        sources.add(source)
+
+    return sources
+
+
+def __structure(sources: set[str]) -> dict[str, dict[str, list[str | AnswerKey]]]:
+    structure: dict[str, dict[str, list[str | AnswerKey]]] = {}
+    for src in sources:
+        structure[src] = {
+            "train_texts": [],
+            "train_questions": [],
+            "train_answers": [],
+            "test_texts": [],
+            "test_questions": [],
+            "test_answers": [],
+        }
+    return structure
+
+
+def get_data() -> dict[str, dict[str, list[str | AnswerKey]]]:
     seen_qs = set()
     seen_as = set()
 
     records = __all_project_records()
+    sources = __sources(records)
+    data = __structure(sources)
 
     for record in records:
         if __invalid_record(record):
@@ -94,6 +111,8 @@ def get_data() -> (
         seen_as.add(answer_key)
 
         split = record["meta"]["split"]
+        source = record["meta"]["source"]
+
         answer: str = paragraph[start:end]
         answer_info: AnswerKey = {
             "answer_end": end,
@@ -102,21 +121,18 @@ def get_data() -> (
         }
 
         if split == "train":
-            train_texts.append(paragraph)
-            train_questions.append(question)
-            train_answers.append(answer_info)
+            data[source]["train_texts"].append(paragraph)
+            data[source]["train_questions"].append(question)
+            data[source]["train_answers"].append(answer_info)
 
         if split == "test":
-            test_texts.append(paragraph)
-            test_questions.append(question)
-            test_answers.append(answer_info)
+            data[source]["test_texts"].append(paragraph)
+            data[source]["test_questions"].append(question)
+            data[source]["test_answers"].append(answer_info)
 
     DEST = "./datafiles/ruquad_1_unstandardized.zip"
     URL = "https://repository.clarin.is/repository/xmlui/bitstream/handle/20.500.12537/311"
 
     os.system(f"curl --output {DEST} {URL}")
 
-    return (
-        (train_texts, train_questions, train_answers),
-        (test_texts, test_questions, test_answers),
-    )
+    return data
