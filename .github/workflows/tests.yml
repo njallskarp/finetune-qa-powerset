@@ -41,7 +41,7 @@ jobs:
 
     - name: Install CPU version for Transformers
       run: |
-        pip install 'transformers[torch]'
+        pip install 'transformers[torch-cpu]'
 
     - name: Run tests
       run: |
