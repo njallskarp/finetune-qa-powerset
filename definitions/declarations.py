@@ -118,3 +118,9 @@ class AnswerKey(TypedDict):
     answer_end: int
     answer_start: int
     text: str
+
+
+class QaData(TypedDict):
+    paragraph: str
+    question: str
+    answer_info: AnswerKey

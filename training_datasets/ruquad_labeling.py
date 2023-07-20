@@ -4,7 +4,7 @@ import os
 import requests
 from dotenv import dotenv_values
 
-from definitions.declarations import AnswerKey, CleanRUResponse, RUResponse
+from definitions.declarations import AnswerKey, CleanRUResponse, QaData, RUResponse
 
 PROJECT_IDS = [1, 4, 5]
 
@@ -69,21 +69,14 @@ def __sources(records: list[CleanRUResponse]) -> set[str]:
     return sources
 
 
-def __structure(sources: set[str]) -> dict[str, dict[str, list[str | AnswerKey]]]:
-    structure: dict[str, dict[str, list[str | AnswerKey]]] = {}
+def __structure(sources: set[str]) -> dict[str, dict[str, list[QaData]]]:
+    structure: dict[str, dict[str, list[QaData]]] = {}
     for src in sources:
-        structure[src] = {
-            "train_texts": [],
-            "train_questions": [],
-            "train_answers": [],
-            "test_texts": [],
-            "test_questions": [],
-            "test_answers": [],
-        }
+        structure[src] = {"train": [], "test": []}
     return structure
 
 
-def get_data() -> dict[str, dict[str, list[str | AnswerKey]]]:
+def get_data() -> dict[str, dict[str, list[QaData]]]:
     seen_qs = set()
     seen_as = set()
 
@@ -115,20 +108,18 @@ def get_data() -> dict[str, dict[str, list[str | AnswerKey]]]:
 
         answer: str = paragraph[start:end]
         answer_info: AnswerKey = {
-            "answer_end": end,
             "answer_start": start,
+            "answer_end": end,
             "text": answer,
         }
 
-        if split == "train":
-            data[source]["train_texts"].append(paragraph)
-            data[source]["train_questions"].append(question)
-            data[source]["train_answers"].append(answer_info)
+        qaData: QaData = {
+            "paragraph": paragraph,
+            "question": question,
+            "answer_info": answer_info,
+        }
 
-        if split == "test":
-            data[source]["test_texts"].append(paragraph)
-            data[source]["test_questions"].append(question)
-            data[source]["test_answers"].append(answer_info)
+        data[source][split].append(qaData)
 
     DEST = "./datafiles/ruquad_1_unstandardized.zip"
     URL = "https://repository.clarin.is/repository/xmlui/bitstream/handle/20.500.12537/311"
@@ -136,3 +127,6 @@ def get_data() -> dict[str, dict[str, list[str | AnswerKey]]]:
     os.system(f"curl --output {DEST} {URL}")
 
     return data
+
+
+print(get_data())
