@@ -39,9 +39,9 @@ jobs:
         # Maybe use the CUDA 10.2 version instead?
         # pip install --pre torch torchvision -f https://download.pytorch.org/whl/nightly/cu102/torch_nightly.html
 
-    - name: Install Transformers
+    - name: Install CPU version for Transformers
       run: |
-        pip install transformers
+        pip install 'transformers[torch]'
 
     - name: Run tests
       run: |
