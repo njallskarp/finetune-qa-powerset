@@ -38,7 +38,7 @@ def run_training(
             model, tokenizer, test_loader, test_texts, test_questions, test_answers
         )
 
-        if metrics_dict["f1"] > highest_f1_score: 
+        if metrics_dict["f1"] > highest_f1_score:
             highest_f1_score = metrics_dict["f1"]
             PATH = f"path/save/model{epoch}.pt"
             torch.save(model.state_dict(), PATH)
