@@ -1,3 +1,4 @@
+import torch
 import wandb
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import LambdaLR
@@ -28,6 +29,7 @@ def run_training(
     )
 
     test_texts, test_questions, test_answers = test_data_raw
+    highest_f1_score = 0
 
     for epoch in range(epochs):
         print(f"\n****** epoch {epoch + 1}/{epochs} ********\n")
@@ -35,6 +37,11 @@ def run_training(
         val_loss, metrics_dict = validate(
             model, tokenizer, test_loader, test_texts, test_questions, test_answers
         )
+
+        if metrics_dict["f1"] > highest_f1_score: 
+            highest_f1_score = metrics_dict["f1"]
+            PATH = f"path/save/model{epoch}.pt"
+            torch.save(model.state_dict(), PATH)
 
         loss_dict = {"train_loss": train_loss, "val_loss": val_loss}
         wandb.log({**loss_dict, **metrics_dict})
