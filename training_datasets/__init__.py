@@ -1,43 +1,39 @@
+from itertools import chain, combinations
+
+import ruquad_labeling
+from datasets import SquadDataset
 from tokenizers import Encoding
+from torch.utils.data import ConcatDataset, DataLoader
 from transformers.convert_slow_tokenizer import Tokenizer
 
 from definitions.declarations import AnswerKey, QaData
 
 
-def __get_all_domain_answers(domain_data: dict[str, list[QaData]]) -> list[AnswerKey]: 
-    data = []
-
-    train_data = domain_data["train"]
-    test_data = domain_data["test"]
-
-    data.extend(train_data)
-    data.extend(test_data)
-
-    return [qa["answer_info"] for qa in data]
-
-def __add_token_positions(encodings: Encoding, tokenizer: Tokenizer, answers: list[AnswerKey]):
+def __add_token_positions(
+    encodings: Encoding, tokenizer: Tokenizer, answers: list[AnswerKey]
+) -> None:
     """
     Code reused from open source colab notebook:
     https://github.com/alexaapo/BERT-based-pretrained-model-using-SQuAD-2.0-dataset/blob/main/Fine_Tuning_Bert.ipynb
     """
-    
+
     start_pos, end_pos = [], []
-    
+
     for i, answer in enumerate(answers):
-        start = encodings.char_to_token(i, answer['answer_start'])
-        end   = encodings.char_to_token(i, answer['answer_end'])
-        
+        start = encodings.char_to_token(i, answer["answer_start"])
+        end = encodings.char_to_token(i, answer["answer_end"])
+
         if start is None:
             start = tokenizer.model_max_length
         if end is None:
-            end = encodings.char_to_token(i, answer['answer_end'] - 1)
-        if end  is None:
+            end = encodings.char_to_token(i, answer["answer_end"] - 1)
+        if end is None:
             end = tokenizer.model_max_length
-            
+
         start_pos.append(start)
         end_pos.append(end)
-        
-    encodings.update({'start_positions': start_pos, 'end_positions': end_pos})
+
+    encodings.update({"start_positions": start_pos, "end_positions": end_pos})
 
 
 def __correct_span_errors(dataset: dict[str, list[QaData]]) -> None:
@@ -70,3 +66,77 @@ def __correct_span_errors(dataset: dict[str, list[QaData]]) -> None:
         elif text[start_idx - 2 : end_idx - 2] == real_answer:
             answer["answer_start"] = start_idx - 2
             answer["answer_end"] = end_idx - 2
+
+
+def __make_squad_datasets(
+    dataset: dict[str, dict[str, list[QaData]]], tokenizer: Tokenizer
+) -> dict[str, dict[str, SquadDataset]]:
+    squad_datasets: dict[str, SquadDataset] = {}
+    dataset = ruquad_labeling.get_data()
+
+    for domain in dataset.keys():
+        train_texts = [qa["paragraph"] for qa in dataset[domain]["train"]]
+        train_questions = [qa["question"] for qa in dataset[domain]["train"]]
+        train_answers = [qa["answer_info"] for qa in dataset[domain]["train"]]
+
+        test_texts = [qa["paragraph"] for qa in dataset[domain]["test"]]
+        test_questions = [qa["question"] for qa in dataset[domain]["test"]]
+        test_answers = [qa["answer_info"] for qa in dataset[domain]["test"]]
+
+        __correct_span_errors(dataset[domain])
+
+        train_encodings = tokenizer(
+            train_texts, train_questions, truncation=True, padding=True
+        )
+        test_encodings = tokenizer(
+            test_texts, test_questions, truncation=True, padding=True
+        )
+
+        __add_token_positions(train_encodings, tokenizer, train_answers)
+        __add_token_positions(test_encodings, tokenizer, test_answers)
+
+        train_dataset = SquadDataset(train_encodings, is_train=True)
+        test_dataset = SquadDataset(test_encodings, is_train=False)
+
+        squad_datasets[domain] = {"train": train_dataset, "test": test_dataset}
+
+    return squad_datasets
+
+
+def __domain_powersets(domains: list[str]) -> set[tuple[str]]:
+    return set(
+        chain.from_iterable(
+            combinations(domains, r) for r in range(1, len(domains) + 1)
+        )
+    )
+
+
+def load_dataset(
+    tokenizer: Tokenizer, batch_size: int
+) -> dict[tuple[str], dict[str, DataLoader]]:
+
+    loaders: dict[tuple[str], dict[str, DataLoader]] = {}
+
+    raw_data = ruquad_labeling.get_data()
+    squad_datasets = __make_squad_datasets(raw_data, tokenizer)
+
+    data_domains = list(raw_data.keys())
+    powerset = __domain_powersets(data_domains)
+
+    for domains in powerset:
+        train_concat_datasets = [squad_datasets[domain]["train"] for domain in domains]
+        test_concat_datasets = [squad_datasets[domain]["test"] for domain in domains]
+
+        train_squad_dataset = ConcatDataset(train_concat_datasets)
+        test_squad_dataset = ConcatDataset(test_concat_datasets)
+
+        train_loader = DataLoader(
+            train_squad_dataset, batch_size=batch_size, shuffle=True
+        )
+        test_loader = DataLoader(
+            test_squad_dataset, batch_size=batch_size, shuffle=True
+        )
+
+        loaders[domains] = {"train": train_loader, "test": test_loader}
+
+    return loaders
