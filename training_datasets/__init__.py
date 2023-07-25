@@ -1,7 +1,7 @@
 from itertools import chain, combinations
 
 import ruquad_labeling
-from datasets import SquadDataset
+from datasets import QaDataset
 from tokenizers import Encoding
 from torch.utils.data import ConcatDataset, DataLoader
 from transformers.convert_slow_tokenizer import Tokenizer
@@ -68,10 +68,10 @@ def __correct_span_errors(dataset: dict[str, list[QaData]]) -> None:
             answer["answer_end"] = end_idx - 2
 
 
-def __make_squad_datasets(
+def __make_qa_datasets(
     dataset: dict[str, dict[str, list[QaData]]], tokenizer: Tokenizer
-) -> dict[str, dict[str, SquadDataset]]:
-    squad_datasets: dict[str, SquadDataset] = {}
+) -> dict[str, dict[str, QaDataset]]:
+    qa_datasets: dict[str, QaDataset] = {}
     dataset = ruquad_labeling.get_data()
 
     for domain in dataset.keys():
@@ -95,12 +95,12 @@ def __make_squad_datasets(
         __add_token_positions(train_encodings, tokenizer, train_answers)
         __add_token_positions(test_encodings, tokenizer, test_answers)
 
-        train_dataset = SquadDataset(train_encodings, is_train=True)
-        test_dataset = SquadDataset(test_encodings, is_train=False)
+        train_dataset = QaDataset(train_encodings, is_train=True)
+        test_dataset = QaDataset(test_encodings, is_train=False)
 
-        squad_datasets[domain] = {"train": train_dataset, "test": test_dataset}
+        qa_datasets[domain] = {"train": train_dataset, "test": test_dataset}
 
-    return squad_datasets
+    return qa_datasets
 
 
 def __domain_powersets(domains: list[str]) -> set[tuple[str]]:
@@ -117,26 +117,26 @@ def load_dataset(
     loaders: dict[tuple[str], dict[str, DataLoader]] = {}
 
     raw_data = ruquad_labeling.get_data()
-    squad_datasets = __make_squad_datasets(raw_data, tokenizer)
+    qa_datasets = __make_qa_datasets(raw_data, tokenizer)
 
     data_domains = list(raw_data.keys())
     powerset = __domain_powersets(data_domains)
 
     for domains in powerset:
-        train_concat_datasets = [squad_datasets[domain]["train"] for domain in domains]
-        test_concat_datasets = [squad_datasets[domain]["test"] for domain in domains]
+        train_concat_datasets = [qa_datasets[domain]["train"] for domain in domains]
+        test_concat_datasets = [qa_datasets[domain]["test"] for domain in domains]
 
         test_raw_data = [raw_data[domain]["test"] for domain in domains]
         test_raw_data_flat: list[QaData] = list(chain.from_iterable(test_raw_data))
 
-        train_squad_dataset = ConcatDataset(train_concat_datasets)
-        test_squad_dataset = ConcatDataset(test_concat_datasets)
+        train_qa_dataset = ConcatDataset(train_concat_datasets)
+        test_qa_dataset = ConcatDataset(test_concat_datasets)
 
         train_loader = DataLoader(
-            train_squad_dataset, batch_size=batch_size, shuffle=True
+            train_qa_dataset, batch_size=batch_size, shuffle=True
         )
         test_loader = DataLoader(
-            test_squad_dataset, batch_size=batch_size, shuffle=True
+            test_qa_dataset, batch_size=batch_size, shuffle=True
         )
 
         loaders[domains] = {
