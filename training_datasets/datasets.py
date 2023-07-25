@@ -3,7 +3,7 @@ from tokenizers import Encoding
 from torch.utils.data import Dataset
 
 
-class SquadDataset(Dataset):
+class QaDataset(Dataset):
     """Code reused from open source colab notebook:
 
     https://github.com/alexaapo/BERT-based-pretrained-model-using-SQuAD-2.0-dataset/blob/main/Fine_Tuning_Bert.ipynb

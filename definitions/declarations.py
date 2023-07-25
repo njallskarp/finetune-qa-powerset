@@ -1,5 +1,7 @@
 from typing import TypedDict
 
+from torch.utils.data import DataLoader
+
 
 class Answers(TypedDict):
     """
@@ -124,3 +126,10 @@ class QaData(TypedDict):
     paragraph: str
     question: str
     answer_info: AnswerKey
+
+
+class LoaderDict(TypedDict):
+    train: DataLoader
+    test: DataLoader
+    data: list[QaData]
+    domains: tuple[str]

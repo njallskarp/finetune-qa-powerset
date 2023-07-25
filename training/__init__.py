@@ -7,13 +7,13 @@ from train import train_epoch
 from transformers import BertModel, BertTokenizer, get_linear_schedule_with_warmup
 from validate import validate
 
-from definitions.declarations import Answers
+from definitions.declarations import QaData
 
 
 def run_training(
     train_loader: DataLoader,
     test_loader: DataLoader,
-    test_data_raw: tuple[list[str], list[str], list[Answers]],
+    test_data_raw: list[QaData],
     model: BertModel,
     tokenizer: BertTokenizer,
     epochs: int,
@@ -28,7 +28,10 @@ def run_training(
         optim, num_warmup_steps=warmup_steps, num_training_steps=training_steps
     )
 
-    test_texts, test_questions, test_answers = test_data_raw
+    test_texts = [qa["paragraph"] for qa in test_data_raw]
+    test_questions = [qa["question"] for qa in test_data_raw]
+    test_answers = [qa["answer_info"] for qa in test_data_raw]
+
     highest_f1_score = 0
 
     for epoch in range(epochs):
