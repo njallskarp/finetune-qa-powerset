@@ -1,3 +1,4 @@
+from collections.abc import Generator
 from itertools import chain, combinations
 
 import ruquad_labeling
@@ -6,7 +7,7 @@ from tokenizers import Encoding
 from torch.utils.data import ConcatDataset, DataLoader
 from transformers.convert_slow_tokenizer import Tokenizer
 
-from definitions.declarations import AnswerKey, QaData
+from definitions.declarations import AnswerKey, LoaderDict, QaData
 
 
 def __add_token_positions(
@@ -111,11 +112,9 @@ def __domain_powersets(domains: list[str]) -> set[tuple[str]]:
     )
 
 
-def load_dataset(
+def get_powerset_dataloaders(
     tokenizer: Tokenizer, batch_size: int
-) -> dict[tuple[str], dict[str, DataLoader]]:
-    loaders: dict[tuple[str], dict[str, DataLoader]] = {}
-
+) -> Generator[LoaderDict, None, None]:
     raw_data = ruquad_labeling.get_data()
     qa_datasets = __make_qa_datasets(raw_data, tokenizer)
 
@@ -135,10 +134,11 @@ def load_dataset(
         train_loader = DataLoader(train_qa_dataset, batch_size=batch_size, shuffle=True)
         test_loader = DataLoader(test_qa_dataset, batch_size=batch_size, shuffle=True)
 
-        loaders[domains] = {
+
+
+        yield {
             "train": train_loader,
             "test": test_loader,
             "data": test_raw_data_flat,
+            "domains": domains
         }
-
-    return loaders
