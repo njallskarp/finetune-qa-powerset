@@ -1,4 +1,4 @@
-from collections.abc import Generator
+from collections.abc import Iterable
 from itertools import chain, combinations
 
 import ruquad_labeling
@@ -114,7 +114,7 @@ def __domain_powersets(domains: list[str]) -> set[tuple[str]]:
 
 def get_powerset_dataloaders(
     tokenizer: Tokenizer, batch_size: int
-) -> Generator[LoaderDict, None, None]:
+) -> Iterable[LoaderDict]:
     raw_data = ruquad_labeling.get_data()
     qa_datasets = __make_qa_datasets(raw_data, tokenizer)
 
