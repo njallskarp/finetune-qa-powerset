@@ -127,7 +127,8 @@ class QaData(TypedDict):
     question: str
     answer_info: AnswerKey
 
-class LoaderDict(TypedDict): 
+
+class LoaderDict(TypedDict):
     train: DataLoader
     test: DataLoader
     data: list[QaData]

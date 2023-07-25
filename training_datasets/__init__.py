@@ -134,11 +134,9 @@ def get_powerset_dataloaders(
         train_loader = DataLoader(train_qa_dataset, batch_size=batch_size, shuffle=True)
         test_loader = DataLoader(test_qa_dataset, batch_size=batch_size, shuffle=True)
 
-
-
         yield {
             "train": train_loader,
             "test": test_loader,
             "data": test_raw_data_flat,
-            "domains": domains
+            "domains": domains,
         }
