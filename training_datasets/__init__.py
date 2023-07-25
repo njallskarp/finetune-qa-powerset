@@ -114,7 +114,6 @@ def __domain_powersets(domains: list[str]) -> set[tuple[str]]:
 def load_dataset(
     tokenizer: Tokenizer, batch_size: int
 ) -> dict[tuple[str], dict[str, DataLoader]]:
-
     loaders: dict[tuple[str], dict[str, DataLoader]] = {}
 
     raw_data = ruquad_labeling.get_data()
@@ -127,6 +126,9 @@ def load_dataset(
         train_concat_datasets = [squad_datasets[domain]["train"] for domain in domains]
         test_concat_datasets = [squad_datasets[domain]["test"] for domain in domains]
 
+        test_raw_data = [raw_data[domain]["test"] for domain in domains]
+        test_raw_data_flat: list[QaData] = list(chain.from_iterable(test_raw_data))
+
         train_squad_dataset = ConcatDataset(train_concat_datasets)
         test_squad_dataset = ConcatDataset(test_concat_datasets)
 
@@ -137,6 +139,10 @@ def load_dataset(
             test_squad_dataset, batch_size=batch_size, shuffle=True
         )
 
-        loaders[domains] = {"train": train_loader, "test": test_loader}
+        loaders[domains] = {
+            "train": train_loader,
+            "test": test_loader,
+            "data": test_raw_data_flat,
+        }
 
     return loaders
