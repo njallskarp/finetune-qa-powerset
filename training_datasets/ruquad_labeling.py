@@ -21,6 +21,7 @@ def __records(project_id: int, api_key: str) -> list[CleanRUResponse]:
     )
     headers = {"Authorization": f"Token {api_key}"}
     res = requests.get(url, headers=headers)
+    res.encoding = "utf-8"
     records: list[RUResponse] = json.loads(res.text)
     clean_records: list[CleanRUResponse] = [
         {"annotations": record.get("annotations", []), "meta": record.get("meta", {})}
