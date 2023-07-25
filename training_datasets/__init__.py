@@ -132,12 +132,8 @@ def load_dataset(
         train_qa_dataset = ConcatDataset(train_concat_datasets)
         test_qa_dataset = ConcatDataset(test_concat_datasets)
 
-        train_loader = DataLoader(
-            train_qa_dataset, batch_size=batch_size, shuffle=True
-        )
-        test_loader = DataLoader(
-            test_qa_dataset, batch_size=batch_size, shuffle=True
-        )
+        train_loader = DataLoader(train_qa_dataset, batch_size=batch_size, shuffle=True)
+        test_loader = DataLoader(test_qa_dataset, batch_size=batch_size, shuffle=True)
 
         loaders[domains] = {
             "train": train_loader,
