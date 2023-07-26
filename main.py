@@ -1,5 +1,11 @@
 import argparse
 
+import wandb
+
+import models
+import training_datasets
+from training import run_training
+
 
 def parse_args() -> argparse.Namespace:
     """
@@ -34,8 +40,25 @@ def main(args: argparse.Namespace) -> None:
         args (argparse.Namespace): the arguments parsed from CLI
     """
 
-    # TODO: set up training and call training pipeline
+    model, tokenizer = models.load(args.bert_name)
+    powerset_data = training_datasets.get_powerset_dataloaders(
+        tokenizer=tokenizer, batch_size=args.batch_size
+    )
+
+    wandb.init("njallis")
+
+    for data in powerset_data:
+        run_training(
+            data["train"],
+            data["test"],
+            data["data"],
+            model,
+            tokenizer,
+            args.epochs,
+            args.lr,
+        )
 
 
 if __name__ == "__main__":
     args = parse_args()
+    main(args)
